@@ -5,7 +5,6 @@ import (
 	"io"
 	"io/ioutil"
 	"os/exec"
-	"strings"
 )
 
 const (
@@ -21,7 +20,6 @@ const (
 // so "\\a" is also the "\\a" in argment, not "\a".
 // "b\a" -> "b\a"
 func splitCmdAgrs(cmds string) []string {
-
 	raw := []byte(cmds)
 	length := len(raw)
 
@@ -97,21 +95,23 @@ func splitCmdAgrs(cmds string) []string {
 
 // convert spaces in arg to "\ "
 // so it can split with func [splitCmdAgrs]
-func safeArg(arg string) string {
-	return strings.ReplaceAll(arg, " ", "\\ ")
-}
+// func safeArg(arg string) string {
+// 	return strings.ReplaceAll(arg, " ", "\\ ")
+// }
 
-func splitt(s string) (tokens []string) {
-	for _, ss := range strings.Split(s, " ") {
-		tokens = append(tokens, strings.Split(ss, "\n")...)
-	}
-	return
-}
+// func splitt(s string) (tokens []string) {
+// 	for _, ss := range strings.Split(s, " ") {
+// 		tokens = append(tokens, strings.Split(ss, "\n")...)
+// 	}
+// 	return
+// }
 
+// Run the specified command and return the output
 func Run(cmd string) (string, error) {
 	return RunSh(splitCmdAgrs(cmd)...)
 }
 
+// RunSh the specified command through sh
 func RunSh(cmd ...string) (string, error) {
 	cmdExec := exec.Command(cmd[0], cmd[1:]...)
 	in, _ := cmdExec.StdinPipe()
