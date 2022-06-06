@@ -81,12 +81,10 @@ func splitCmdAgrs(cmds string) []string {
 	}
 
 	if escape {
-		escape = false
 		fillArgChar(tkSpPerfix)
 	}
 
 	if argRec {
-		argRec = false
 		finishArg()
 	}
 
