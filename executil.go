@@ -9,17 +9,17 @@ import (
 
 const (
 	// token of prefix for space, escape char '\'
-	tkSpPerfix = '\\'
+	tkSpPrefix = '\\'
 	// the space
 	tkSp = ' '
 )
 
-// split cmds with " ".
-// recognize "\ " as a " " is a part of one argument
+// splitCmdArgs splits cmds with spaces.
+// It recognizes "\ " as a " " (space) in arguments of the command.
 // '\' is escape char only effect with space ' '.
 // so "\\a" is also the "\\a" in argment, not "\a".
-// "b\a" -> "b\a"
-func splitCmdAgrs(cmds string) []string {
+// e.g. "b\a" -> "b\a".
+func splitCmdArgs(cmds string) []string {
 	raw := []byte(cmds)
 	length := len(raw)
 
@@ -58,10 +58,10 @@ func splitCmdAgrs(cmds string) []string {
 				argRec = false
 				finishArg()
 			}
-		case tkSpPerfix:
+		case tkSpPrefix:
 			if escape {
 				// like "\\"
-				fillArgChar(tkSpPerfix) // first '\'
+				fillArgChar(tkSpPrefix) // first '\'
 			} else {
 				escape = true
 			}
@@ -74,14 +74,14 @@ func splitCmdAgrs(cmds string) []string {
 			}
 			if escape {
 				escape = false
-				fillArgChar(tkSpPerfix)
+				fillArgChar(tkSpPrefix)
 			}
 			fillArgChar(c)
 		}
 	}
 
 	if escape {
-		fillArgChar(tkSpPerfix)
+		fillArgChar(tkSpPrefix)
 	}
 
 	if argRec {
@@ -106,7 +106,7 @@ func splitCmdAgrs(cmds string) []string {
 
 // Run the specified command and return the output
 func Run(cmd string) (string, error) {
-	return RunSh(splitCmdAgrs(cmd)...)
+	return RunSh(splitCmdArgs(cmd)...)
 }
 
 // RunSh the specified command through sh
